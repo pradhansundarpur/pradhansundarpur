@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vote For Priti Sardar</title>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    #canvas {
+      margin: 0;
+      padding: 0;
+      background: rgb(114, 190, 237);
+      height: 100%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .insta-view {
+      position: relative;
+      aspect-ratio: 9 / 16;
+      width: 100%;
+      max-width: 360px;
+      background: rgb(114, 190, 237);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .insta-view #bg {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .profile-pic {
+      height: 125px;
+      width: 125px;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+    }
+
+    .name-tag {
+      position: absolute;
+      bottom: 0;
+      left: 0px;
+      background-color: rgb(213, 46, 46);
+      height: 20px;
+      margin-bottom: 2px;
+      border-radius: 0px 10px 10px 0px;
+      width: 21ch;
+      /* max-width: 20ch; */
+      padding: 0 0px;
+      text-align: center;
+    }
+
+    .name-tag span {
+      position: relative;
+      top: 4px;
+      font-size: 12px;
+      color: white;
+      white-space: nowrap;
+    }
+
+    .download-btn {
+      color: white;
+      text-align: center;
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #28a745;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .download-btn:hover {
+      background-color: #218838;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background: rgb(114, 190, 237);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    #inputs {
+      background: linear-gradient(rgba(214, 74, 74, 0.9), rgba(214, 74, 74, 0.9));
+      background-size: cover;
+      width: 90%;
+      max-width: 400px;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    #inputs label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    #inputs input[type="text"],
+    #inputs input[type="file"] {
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    #inputs input[type="text"] {
+      background: #ffffff;
+      color: #333;
+    }
+
+    #inputs input[type="file"] {
+      background: #f3f3f3;
+    }
+
+    .download-btn {
+      background-color: #fff;
+      color: #d64a4a;
+      padding: 10px 20px;
+      border: none;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .download-btn:hover {
+      background-color: #f3f3f3;
+    }
+
+    #textlabel {
+      font-size: 14px;
+    }
+
+    @media (max-width: 500px) {
+      #inputs {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="inputs">
+    <img src="banner.jpeg" alt="">
+    <label for="name" id="textlabel">Name (0/14)</label>
+    <input type="text" id="name" maxlength="14" oninput="textDisEna()">
+    
+    <label for="pic">Upload Picture</label>
+    <input type="file" id="pic" accept="image/*">
+    
+    <button class="download-btn" onclick="submitPic()">Submit</button>
+  </div>
+
+  <div id="canvas">
+    <div class="insta-view" id="poster">
+      <img id="bg" src="vote.png" alt="Vote Poster" />
+      <img id="pp" class="profile-pic" src="test.jpeg" alt="User" />
+      <h6 class="name-tag"><span id="uname">167890</span></h6>
+    </div>
+    <button class="download-btn" onclick="downloadDivAsImage()">Download</button>
+  </div>
+</body>
+  <script>
+    function downloadDivAsImage() {
+      let name = document.getElementById("name").value.trim();
+      const div = document.getElementById("poster");
+      html2canvas(div).then(canvas => {
+        const link = document.createElement("a");
+        link.download = name+"_poster.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+
+    function submitPic(){
+        let name = document.getElementById("name").value.trim();
+        let pic = document.getElementById("pic").files[0];
+        if(!name||!pic)return;
+        const upDiv = document.getElementById("inputs");
+        const canvasDiv = document.getElementById("canvas");
+        const pp = document.getElementById("pp");
+        pp.src = URL.createObjectURL(pic);
+        document.getElementById("uname").innerText = name;
+        upDiv.style.display = "none";
+        canvasDiv.style.display = "flex";
+    }
+
+    function textDisEna() {
+      let input = document.getElementById("name");
+      let textlabel = document.getElementById("textlabel");
+      if (input.value.length > 14) {
+        textlabel.textContent = "Max limit exceeded!";
+        textlabel.style.color = "yellow";
+      } else {
+        textlabel.textContent = `Name (${input.value.length}/14)`;
+        textlabel.style.color = "white";
+      }
+    }
+  </script>
+  
+</html>
